@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.13)
-project(OpenGL_Floor)
+project(ArchiMage)
 # Parametre
 set(CMAKE_BUILD_TYPE Debug) # À commenter lors du rendu
 set(CMAKE_CXX_STANDARD 17)
@@ -57,10 +57,23 @@ endforeach()
 
 target_compile_options(main PUBLIC "-Wall")
 
+#My libs
+target_include_directories(main PUBLIC "include" BEFORE)
+add_subdirectory("include/lib_objectsReader")
+add_subdirectory("include/lib_shaders")
+
+#openGL
 find_package(OpenGL REQUIRED)
 find_package(GLUT REQUIRED)
 find_package(GLEW REQUIRED)
-
 include_directories( ${OPENGL_INCLUDE_DIRS}  ${GLUT_INCLUDE_DIRS} ${GLEW_INCLUDE_DIRS} ${GLU_INCLUDE_DIRS})
 
-target_link_libraries(main ${OPENGL_LIBRARIES} ${GLUT_LIBRARY} ${GLEW_LIBRARIES} ${GLU_LIBRARIES})
+target_link_libraries(
+	main
+	${OPENGL_LIBRARIES}
+	${GLUT_LIBRARY}
+	${GLEW_LIBRARIES}
+	${GLU_LIBRARIES}
+	shaders
+	objectsReader
+)
