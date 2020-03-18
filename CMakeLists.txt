@@ -14,8 +14,7 @@ set(HEADERS
 )
 
 set(SHADERS
-	# "shader.frag"
-	# "shader.vert"
+	"shaders/processNormal.vert"
 )
 
 add_executable(main ${HEADERS} ${SRCS})

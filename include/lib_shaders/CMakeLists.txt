@@ -7,11 +7,15 @@ set(CMAKE_CXX_STANDARD 17)
 
 #Project
 set(SRCS
-    "objetsOFF.cpp"
+    "fonctions.cpp"
+		"glsl_fs.cpp"
+		"glsl_vs.cpp"
 )
 
 set (HEADERS
-    "objetsOFF.h"
+    "fonctions.h"
+		"glsl_fs.hpp"
+		"glsl_vs.hpp"
 )
 
 add_library(shaders ${SRCS} ${HEADERS})

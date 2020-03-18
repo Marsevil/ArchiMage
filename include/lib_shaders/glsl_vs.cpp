@@ -6,7 +6,7 @@
 #include <cstdlib>
 #include <GL/glew.h>
 
-#include "glsl_vs.h"
+#include "glsl_vs.hpp"
 #include "fonctions.h"
 
 GLSL_VS::GLSL_VS(void) {
@@ -35,5 +35,3 @@ int GLSL_VS::Compile() {
 	glCompileShader(idvs);
 	return EXIT_SUCCESS;
 }
-
-

@@ -6,7 +6,7 @@
 #include <cstdlib>
 #include <GL/glew.h>
 
-#include "glsl_fs.h"
+#include "glsl_fs.hpp"
 #include "fonctions.h"
 
 GLSL_FS::GLSL_FS(void) {
@@ -35,5 +35,3 @@ int GLSL_FS::Compile() {
 	glCompileShader(idfs);
 	return EXIT_SUCCESS;
 }
-
-
