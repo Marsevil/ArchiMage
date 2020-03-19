@@ -5,6 +5,9 @@
 #include <iostream>
 #include "../headers/DrawableObject.hpp"
 
+int oldMouseX = 0, oldMouseY = 0;
+float mouseAngleX = 0.0, mouseAngleY = 0.0;
+
 DrawableObject* offLoader = nullptr;
 
 void renderScene(void) {
@@ -13,19 +16,38 @@ void renderScene(void) {
 	//Edit projection matrix
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
-	gluPerspective(90.0, 1.0, 0.1, 100);
+	glOrtho(-1.0, 1.0, -1.0, 1.0, -1.0, 1.0);
+
+	glRotatef(mouseAngleX, 0.0, 1.0, 0.0);
+	glRotatef(mouseAngleY, 1.0, 0.0, 0.0);
 
 	//Edit model matrix
 	glMatrixMode(GL_MODELVIEW);
-
 	glLoadIdentity();
-	gluLookAt(0.0, 0.0, 5.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0);
 
 	offLoader->draw();
+
+	glutSwapBuffers();
+}
+
+GLvoid callbackIdle() {
+	glutPostRedisplay();
+}
+
+GLvoid callbackMouse(int wx, int wy) {
+	mouseAngleX += oldMouseX - wx;
+	mouseAngleY += oldMouseY - wy;
+
+	oldMouseX = wx;
+	oldMouseY = wy;
 }
 
 void InitialiseGlutCallback() {
 	glutDisplayFunc(renderScene);
+
+	glutIdleFunc(callbackIdle);
+
+	glutMotionFunc(callbackMouse);
 }
 
 void GlewInit() {
@@ -50,7 +72,7 @@ void GlewInit() {
 
 void geomInit() {
 	offLoader = new DrawableObject();
-	offLoader->charge_OFF("objects/sphere.off");
+	offLoader->charge_OFF("objects/bunny.off");
 	offLoader->constructVBO();
 }
 
