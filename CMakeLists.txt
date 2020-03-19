@@ -6,7 +6,7 @@ set(CMAKE_CXX_STANDARD 17)
 
 # Project
 set(SRCS
-	#"sources/main.cpp"
+	"sources/main.cpp"
 	"sources/Drawable.cpp"
 	"sources/DrawableObject.cpp"
 )
