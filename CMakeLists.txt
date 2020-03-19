@@ -15,6 +15,7 @@ set(HEADERS
 
 set(SHADERS
 	"shaders/processNormal.vert"
+	"objects/sphere.off"
 )
 
 add_executable(main ${HEADERS} ${SRCS})

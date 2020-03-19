@@ -4,38 +4,42 @@
 
 //une classe basique pour lire les fichiers OFF
 
-#ifndef _INC_OBJETSOFF_HPP
-#define _INC_OBJETSOFF_HPP
+#ifndef INC_OBJETSOFF_HPP
+#define INC_OBJETSOFF_HPP
 
-struct indexedface {unsigned int S1,S2,S3;};
+namespace off {
 
-struct point3D {
-		double x;
-		double y;
-		double z;
-		};
+	struct indexedface {unsigned int S1,S2,S3;};
 
-class Objet {
+	struct point3D {
+			double x;
+			double y;
+			double z;
+			};
 
-  public :
-	char nom[40];
+	class Objet {
 
-	unsigned int nbsommets;
-	unsigned int nbfaces;
+	  public :
+		char nom[40];
 
-	unsigned int id;
+		unsigned int nbsommets;
+		unsigned int nbfaces;
 
-	struct point3D *lpoints;
-	struct indexedface *lfaces;
-	struct point3D min;
-	struct point3D max;
+		unsigned int id;
 
-	Objet();
-	Objet(const Objet&);
-	~Objet();
-	void charge_OFF(const char *);
-	void affiche();
+		struct point3D *lpoints;
+		struct indexedface *lfaces;
+		struct point3D min;
+		struct point3D max;
 
-};
+		Objet();
+		Objet(const Objet&);
+		~Objet();
+		void charge_OFF(const char *);
+		void affiche();
+
+	};
+
+} // end of namespace
 
 #endif

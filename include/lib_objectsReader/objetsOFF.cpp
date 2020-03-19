@@ -12,6 +12,8 @@
 
 #include "objetsOFF.hpp"
 
+using namespace off;
+
 Objet::Objet() {
 	strcpy(nom, "nil");
 	nbsommets=0;
