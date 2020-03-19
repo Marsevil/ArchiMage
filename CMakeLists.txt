@@ -7,14 +7,18 @@ set(CMAKE_CXX_STANDARD 17)
 # Project
 set(SRCS
 	"sources/main.cpp"
+	"sources/Drawable.cpp"
+	"sources/DrawableObject.cpp"
 )
 
 set(HEADERS
-	# "random_hearder.hpp"
+	"headers/Drawable.hpp"
+	"headers/DrawableObject.hpp"
 )
 
 set(SHADERS
 	"shaders/processNormal.vert"
+	"objects/bunny.off"
 	"objects/sphere.off"
 )
 
