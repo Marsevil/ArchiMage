@@ -15,6 +15,8 @@ set(HEADERS
 
 set(SHADERS
 	"shaders/processNormal.vert"
+	"testObjects/bunny.off"
+	"testObjects/sphere.off"
 )
 
 add_executable(main ${HEADERS} ${SRCS})
