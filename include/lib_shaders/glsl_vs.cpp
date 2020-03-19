@@ -7,7 +7,7 @@
 #include <GL/glew.h>
 
 #include "glsl_vs.hpp"
-#include "fonctions.h"
+#include "fonctions.hpp"
 
 GLSL_VS::GLSL_VS(void) {
 	idvs = glCreateShader(GL_VERTEX_SHADER);

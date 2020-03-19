@@ -11,7 +11,7 @@ set(SRCS
 )
 
 set (HEADERS
-    "objetsOFF.h"
+    "objetsOFF.hpp"
 )
 
 add_library(objectsReader ${SRCS} ${HEADERS})

@@ -6,7 +6,7 @@ set(CMAKE_CXX_STANDARD 17)
 
 # Project
 set(SRCS
-	# "main.cpp"
+	"sources/main.cpp"
 )
 
 set(HEADERS
@@ -15,6 +15,7 @@ set(HEADERS
 
 set(SHADERS
 	"shaders/processNormal.vert"
+	"objects/sphere.off"
 )
 
 add_executable(main ${HEADERS} ${SRCS})

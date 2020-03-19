@@ -3,8 +3,8 @@
 //romain.raffin[AT]univ-amu.fr
 
 //une classe pour les fragment shaders
-#ifndef _GLSL_FS
-#define _GLSL_FS
+#ifndef _GLSL_FS_HPP
+#define _GLSL_FS_HPP
 
 #include <GL/gl.h>
 
@@ -20,4 +20,3 @@ public:
 };
 
 #endif
-
