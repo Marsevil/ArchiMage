@@ -1,15 +1,15 @@
 #ifndef DRAWABLE_OBJECT_HPP
 #define DRAWABLE_OBJECT_HPP
 
-#include "lib_objectsReader/objetsOFF.h"
+#include "lib_objectsReader/objetsOFF.hpp"
 #include "Drawable.hpp"
 
-class DrawableObject : public Objet, public Drawable {
+class DrawableObject : public off::Objet, public virtual Drawable {
 public:
 	DrawableObject();
 
-	virtual void draw() const;
-	virtual void constructVBO() const;
+	virtual void draw() const override;
+	virtual void constructVBO() const override;
 };
 
 #endif /* end of include guard: DRAWABLE_OBJECT_HPP */

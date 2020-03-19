@@ -1,6 +1,6 @@
 #include "../headers/DrawableObject.hpp"
 
-DrawableObject::DrawableObject() : Objet(), Drawable() {
+DrawableObject::DrawableObject() : Drawable(), Objet() {
 	//Nothing to do here
 }
 
