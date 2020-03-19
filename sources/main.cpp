@@ -5,6 +5,7 @@
 #include <iostream>
 #include "../headers/DrawableObject.hpp"
 
+float xpos = 0, zpos = -1;
 int oldMouseX = 0, oldMouseY = 0;
 float mouseAngleX = 0.0, mouseAngleY = 0.0;
 
@@ -16,10 +17,11 @@ void renderScene(void) {
 	//Edit projection matrix
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
-	glOrtho(-1.0, 1.0, -1.0, 1.0, -1.0, 1.0);
+	//glOrtho(1.0, 1.0, -1.0, 1.0, -1.0, 1.0);
 
 	glRotatef(mouseAngleX, 0.0, 1.0, 0.0);
 	glRotatef(mouseAngleY, 1.0, 0.0, 0.0);
+	//glTranslatef(xpos, 0, zpos);
 
 	//Edit model matrix
 	glMatrixMode(GL_MODELVIEW);
@@ -42,12 +44,36 @@ GLvoid callbackMouse(int wx, int wy) {
 	oldMouseY = wy;
 }
 
+GLvoid callbackSpecialKey(int key, int x, int y) {
+	float speed = 1.0;
+
+	switch (key) {
+		case GLUT_KEY_UP:
+			zpos += speed;
+			break;
+		case GLUT_KEY_DOWN:
+			zpos -= speed;
+			break;
+		case GLUT_KEY_LEFT:
+			xpos -= speed;
+			break;
+		case GLUT_KEY_RIGHT:
+			xpos += speed;
+			break;
+
+		default:
+			std::cerr << "Key not binded" << std::endl;
+	}
+}
+
 void InitialiseGlutCallback() {
 	glutDisplayFunc(renderScene);
 
 	glutIdleFunc(callbackIdle);
 
 	glutMotionFunc(callbackMouse);
+
+	glutSpecialFunc(callbackSpecialKey);
 }
 
 void GlewInit() {
