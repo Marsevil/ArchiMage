@@ -10,7 +10,7 @@
 #include <cstdio>
 
 
-#include "objetsOFF.h"
+#include "objetsOFF.hpp"
 
 Objet::Objet() {
 	strcpy(nom, "nil");
@@ -96,5 +96,3 @@ void Objet::affiche()
 		for (i=0;i<nbfaces;i++)
     			fprintf(stderr,"Face %u [%u %u %u]\n",i, lfaces[i].S1, lfaces[i].S2, lfaces[i].S3);
 }
-
-

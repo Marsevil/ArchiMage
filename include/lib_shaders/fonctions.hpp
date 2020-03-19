@@ -3,8 +3,8 @@
 //romain.raffin[AT]univ-amu.fr
 
 //quelques fonctions utiles pour les shaders (lecture de fichier, affichage d'erreurs GLSL, chargement d'une texture par Freeimage)
-#ifndef _H_FONCTIONS
-#define _H_FONCTIONS
+#ifndef FONCTIONS_HPP
+#define FONCTIONS_HPP
 
 #include <GL/gl.h>
 

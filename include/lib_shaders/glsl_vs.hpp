@@ -3,8 +3,8 @@
 //romain.raffin[AT]univ-amu.fr
 
 //une classe pour les VertexShader
-#ifndef _GLSL_VS
-#define _GLSL_VS
+#ifndef _GLSL_VS_HPP
+#define _GLSL_VS_HPP
 
 #include <GL/gl.h>
 
@@ -20,4 +20,3 @@ public:
 };
 
 #endif
-

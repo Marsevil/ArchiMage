@@ -8,7 +8,7 @@
 
 #include <GL/glew.h>
 
-#include "fonctions.h"
+#include "fonctions.hpp"
 
 using namespace std;
 
@@ -65,8 +65,3 @@ monfichier.close();
 
 return (taille);
 }
-
-
-
-
-

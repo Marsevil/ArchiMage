@@ -6,7 +6,7 @@ set(CMAKE_CXX_STANDARD 17)
 
 # Project
 set(SRCS
-	# "main.cpp"
+	"sources/main.cpp"
 )
 
 set(HEADERS

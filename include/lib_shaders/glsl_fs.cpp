@@ -7,7 +7,7 @@
 #include <GL/glew.h>
 
 #include "glsl_fs.hpp"
-#include "fonctions.h"
+#include "fonctions.hpp"
 
 GLSL_FS::GLSL_FS(void) {
 	idfs = glCreateShader(GL_FRAGMENT_SHADER);

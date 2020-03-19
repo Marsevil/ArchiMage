@@ -4,8 +4,8 @@
 
 //une classe basique pour lire les fichiers OFF
 
-#ifndef _INC_OBJETSOFF_H
-#define _INC_OBJETSOFF_H
+#ifndef _INC_OBJETSOFF_HPP
+#define _INC_OBJETSOFF_HPP
 
 struct indexedface {unsigned int S1,S2,S3;};
 
