@@ -66,7 +66,11 @@ void findNewActivePoint() {
 	//Finally change the activePoint.
 	//auto it = std::find(neighbors.begin(), neighbors.end(), dist(rd));
 	//it++;
-	activePoint = dist(rd);
+	std::list<int>::iterator it = neighbors.begin();
+	size_t chosenNeighbors = dist(rd);
+	for (size_t i = 0; i < chosenNeighbors; ++i) ++it;
+	activePoint = *it;
+	
 	offLoader->changeColor(activePoint, new float[3] {1.0, 0.0, 0.0});
 }
 
