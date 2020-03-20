@@ -10,12 +10,14 @@ set(SRCS
     "fonctions.cpp"
 	"glsl_fs.cpp"
 	"glsl_vs.cpp"
+    "glsl_program.cpp"
 )
 
 set (HEADERS
     "fonctions.hpp"
 	"glsl_fs.hpp"
 	"glsl_vs.hpp"
+    "glsl_program.hpp"
 )
 
 add_library(shaders ${SRCS} ${HEADERS})

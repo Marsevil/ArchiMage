@@ -4,6 +4,12 @@
 #include <list>
 #include <random>
 
+// Gestion des shaders :
+#include "lib_shaders/glsl_fs.hpp"
+#include "lib_shaders/glsl_vs.hpp"
+#include "lib_shaders/glsl_program.hpp"
+#include "lib_shaders/fonctions.hpp"
+
 #include <iostream>
 #include "../headers/DrawableObject.hpp"
 
@@ -13,6 +19,18 @@ float mouseAngleX = 0.0, mouseAngleY = 0.0;
 float xpos = 0, zpos = -1;
 
 DrawableObject* offLoader = nullptr;
+
+// ShaderManager :
+GLSL_Program * shaders;
+
+// Les adresses de ce qu'on va envoyer au GPU :
+GLint addr_vertx;
+GLint addr_verty;
+GLint addr_vertz;
+//GLint addr_point;
+GLint addr_color;
+
+size_t num_point = 0;
 
 void findNewActivePoint() {
 	std::list<int> neighbors;
@@ -62,6 +80,24 @@ void renderScene(void) {
 	//Edit model matrix
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
+
+	// Set Data :
+	//float point[3] = {offLoader->lpoints[num_point].x, offLoader->lpoints[num_point].y, offLoader->lpoints[num_point].z}; //offLoader->lpoints[0];
+	float color[4] = {0.0, 1.0, 0.0, 1.0};
+
+	// Send data to GPU :
+	//glUniform3fv(addr_point, 1, point);
+	off::point3D tmp = offLoader->lpoints[offLoader->lfaces[num_point].S1];
+	float m_array[3] = {tmp.x, tmp.y, tmp.z};
+	glUniform3fv(addr_vertx, 1, m_array);
+	tmp = offLoader->lpoints[offLoader->lfaces[num_point].S2];
+	m_array[0] = tmp.x; m_array[1] = tmp.y; m_array[2] = tmp.z;
+	glUniform3fv(addr_verty, 1, m_array);
+	tmp = offLoader->lpoints[offLoader->lfaces[num_point].S3];
+	m_array[0] = tmp.x; m_array[1] = tmp.y; m_array[2] = tmp.z;
+	glUniform3fv(addr_vertz, 1, m_array);
+	glUniform4fv(addr_color, 1, color);
+	num_point++;
 
 	offLoader->draw();
 
@@ -134,12 +170,45 @@ void GlewInit() {
 
 void geomInit() {
 	offLoader = new DrawableObject();
-	offLoader->charge_OFF("objects/bunny.off");
+	offLoader->charge_OFF("objects/sphere.off");
 	offLoader->constructVBO();
 }
 
 void freeSpace() {
+	delete shaders;
 	delete offLoader;
+}
+
+void SetShaders(void) {
+	GLSL_VS color_vs;
+	GLSL_FS color_fs;
+
+	color_vs.ReadSource("shaders/point_color.vert");
+	color_vs.Compile();
+
+	color_fs.ReadSource("shaders/point_color.frag");
+	color_fs.Compile();
+
+	PrintShaderInfo(color_vs.idvs);
+	PrintShaderInfo(color_fs.idfs);
+
+	shaders = new GLSL_Program();
+
+	shaders->Use_VertexShader(color_vs);
+	shaders->Use_FragmentShader(color_fs);
+
+	shaders->Link_Shaders();
+	shaders->Activate();
+
+	// Link :
+	//addr_point = glGetUniformLocation(shaders->idprogram, "cpu_point");
+	addr_color = glGetUniformLocation(shaders->idprogram, "cpu_color");
+	addr_vertx = glGetUniformLocation(shaders->idprogram, "S1");
+	addr_verty = glGetUniformLocation(shaders->idprogram, "S2");
+	addr_vertz = glGetUniformLocation(shaders->idprogram, "S3");
+
+	PrintProgramInfo(shaders->idprogram);
+
 }
 
 int main(int argc, char** argv)
@@ -152,15 +221,17 @@ int main(int argc, char** argv)
 	glutCreateWindow("Lourd Projet Raffin");
 
 	GlewInit();
+	SetShaders();
 
 	InitialiseGlutCallback();
 	//InitialiseGL();
-	//SetShaders();
+
 
 	geomInit();
 
 	glutMainLoop();
 
 	freeSpace();
-  return EXIT_SUCCESS;
+
+	return EXIT_SUCCESS;
 }
