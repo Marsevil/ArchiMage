@@ -13,12 +13,12 @@ varying vec4 vf_color; // Et on lui passe la couleur
 void main(void)
 {
     vf_actif = 0.0;
-    vec3 point = gl_Vertex;
+    vf_color = cpu_color;
 
-    if (point == cpu_point)
+    if (gl_Vertex.xyz == cpu_point.xyz)
     {
-        vf_color = cpu_color;
         vf_actif = 1.0;
     }
 
+    gl_Position = gl_Vertex;
 }
