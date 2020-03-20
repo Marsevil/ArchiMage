@@ -1,7 +1,7 @@
 #ifndef DRAWABLE_OBJECT_HPP
 #define DRAWABLE_OBJECT_HPP
 
-#include "lib_objectsReader/objetsOFF.hpp"
+#include "../include/lib_objectsReader/objetsOFF.hpp"
 #include "Drawable.hpp"
 
 class DrawableObject : public off::Objet, public virtual Drawable {

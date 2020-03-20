@@ -1,15 +1,51 @@
 #include <GL/glew.h>
 #include <GL/gl.h>
 #include <GL/freeglut.h>
+#include <list>
+#include <random>
 
 #include <iostream>
 #include "../headers/DrawableObject.hpp"
 
-float xpos = 0, zpos = -1;
 int oldMouseX = 0, oldMouseY = 0;
+size_t activePoint = 0;
 float mouseAngleX = 0.0, mouseAngleY = 0.0;
+float xpos = 0, zpos = -1;
 
 DrawableObject* offLoader = nullptr;
+
+void findNewActivePoint() {
+	std::list<int> neighbors;
+
+	for (size_t i = 0; i < offLoader->nbfaces; ++i) {
+		//Find neighbors of the activePoint.
+
+		//If the 1rs point is the current point others are its neighbors.
+		if (activePoint == offLoader->lfaces[i].S1) {
+			neighbors.push_back(offLoader->lfaces[i].S2);
+			neighbors.push_back(offLoader->lfaces[i].S3);
+		}
+
+		//The same if the 2nd point is the current.
+		if (activePoint == offLoader->lfaces[i].S2) {
+			neighbors.push_back(offLoader->lfaces[i].S1);
+			neighbors.push_back(offLoader->lfaces[i].S3);
+		}
+
+		//And finally if the 3rd point is the current.
+		if (activePoint == offLoader->lfaces[i].S3) {
+			neighbors.push_back(offLoader->lfaces[i].S1);
+			neighbors.push_back(offLoader->lfaces[i].S2);
+		}
+	}
+
+	//Find a random number which will select the new activePoint.
+	std::random_device rd;
+	std::uniform_int_distribution<int> dist(0, neighbors.size() - 1);
+
+	//Finally change the activePoint.
+	activePoint = dist(rd);
+}
 
 void renderScene(void) {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
