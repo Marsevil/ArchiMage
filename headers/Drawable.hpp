@@ -11,7 +11,7 @@ public:
 	Drawable();
 
 	virtual void draw() const = 0;
-	virtual void constructVBO() const = 0;
+	virtual void constructVBO() = 0;
 
 	inline GLuint const& vbo() const { return VBO; }
 	inline GLuint& vbo() { return VBO; }

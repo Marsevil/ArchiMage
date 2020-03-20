@@ -3,6 +3,7 @@
 #include <GL/freeglut.h>
 #include <list>
 #include <random>
+#include <algorithm>
 
 // Gestion des shaders :
 #include "lib_shaders/glsl_fs.hpp"
@@ -18,19 +19,14 @@ size_t activePoint = 0;
 float mouseAngleX = 0.0, mouseAngleY = 0.0;
 float xpos = 0, zpos = -1;
 
-DrawableObject* offLoader = nullptr;
+DrawableObject * offLoader = nullptr;
 
 // ShaderManager :
 GLSL_Program * shaders;
 
 // Les adresses de ce qu'on va envoyer au GPU :
-GLint addr_vertx;
-GLint addr_verty;
-GLint addr_vertz;
-//GLint addr_point;
+GLint addr_point;
 GLint addr_color;
-
-size_t num_point = 0;
 
 void findNewActivePoint() {
 	std::list<int> neighbors;
@@ -42,27 +38,42 @@ void findNewActivePoint() {
 		if (activePoint == offLoader->lfaces[i].S1) {
 			neighbors.push_back(offLoader->lfaces[i].S2);
 			neighbors.push_back(offLoader->lfaces[i].S3);
+			break;
 		}
 
 		//The same if the 2nd point is the current.
-		if (activePoint == offLoader->lfaces[i].S2) {
+		else if (activePoint == offLoader->lfaces[i].S2) {
 			neighbors.push_back(offLoader->lfaces[i].S1);
 			neighbors.push_back(offLoader->lfaces[i].S3);
+			break;
 		}
 
 		//And finally if the 3rd point is the current.
-		if (activePoint == offLoader->lfaces[i].S3) {
+		else if (activePoint == offLoader->lfaces[i].S3) {
 			neighbors.push_back(offLoader->lfaces[i].S1);
 			neighbors.push_back(offLoader->lfaces[i].S2);
+			break;
 		}
 	}
 
+	//std::cout << neighbors.size() << std::endl;
+
 	//Find a random number which will select the new activePoint.
 	std::random_device rd;
-	std::uniform_int_distribution<int> dist(0, neighbors.size() - 1);
+	//std::uniform_int_distribution<int> dist(0, neighbors.size() - 1);
+	std::uniform_int_distribution<int> dist(0, offLoader->nbsommets *3 - 1);
 
 	//Finally change the activePoint.
+	//auto it = std::find(neighbors.begin(), neighbors.end(), dist(rd));
+	//it++;
 	activePoint = dist(rd);
+	offLoader->changeColor(activePoint, new float[3] {1.0, 0.0, 0.0});
+}
+
+void timer(int extra)
+{
+    glutPostRedisplay();
+    glutTimerFunc(30, timer, 0);
 }
 
 void renderScene(void) {
@@ -82,22 +93,15 @@ void renderScene(void) {
 	glLoadIdentity();
 
 	// Set Data :
-	//float point[3] = {offLoader->lpoints[num_point].x, offLoader->lpoints[num_point].y, offLoader->lpoints[num_point].z}; //offLoader->lpoints[0];
-	float color[4] = {0.0, 1.0, 0.0, 1.0};
+	findNewActivePoint();
+	//float point[3] = {offLoader->lpoints[activePoint].x, offLoader->lpoints[activePoint].y, offLoader->lpoints[activePoint].z};
+	//std::cout << point[0] << " " << point[1] << " " << point[2] << " " << std::endl;
+	//float color[4] = {1.0, 0.0, 0.0, 1.0};
 
 	// Send data to GPU :
 	//glUniform3fv(addr_point, 1, point);
-	off::point3D tmp = offLoader->lpoints[offLoader->lfaces[num_point].S1];
-	float m_array[3] = {tmp.x, tmp.y, tmp.z};
-	glUniform3fv(addr_vertx, 1, m_array);
-	tmp = offLoader->lpoints[offLoader->lfaces[num_point].S2];
-	m_array[0] = tmp.x; m_array[1] = tmp.y; m_array[2] = tmp.z;
-	glUniform3fv(addr_verty, 1, m_array);
-	tmp = offLoader->lpoints[offLoader->lfaces[num_point].S3];
-	m_array[0] = tmp.x; m_array[1] = tmp.y; m_array[2] = tmp.z;
-	glUniform3fv(addr_vertz, 1, m_array);
-	glUniform4fv(addr_color, 1, color);
-	num_point++;
+	//glUniform4fv(addr_color, 1, color);
+
 
 	offLoader->draw();
 
@@ -201,11 +205,8 @@ void SetShaders(void) {
 	shaders->Activate();
 
 	// Link :
-	//addr_point = glGetUniformLocation(shaders->idprogram, "cpu_point");
+	addr_point = glGetUniformLocation(shaders->idprogram, "cpu_point");
 	addr_color = glGetUniformLocation(shaders->idprogram, "cpu_color");
-	addr_vertx = glGetUniformLocation(shaders->idprogram, "S1");
-	addr_verty = glGetUniformLocation(shaders->idprogram, "S2");
-	addr_vertz = glGetUniformLocation(shaders->idprogram, "S3");
 
 	PrintProgramInfo(shaders->idprogram);
 
@@ -221,13 +222,14 @@ int main(int argc, char** argv)
 	glutCreateWindow("Lourd Projet Raffin");
 
 	GlewInit();
-	SetShaders();
+	//SetShaders();
 
 	InitialiseGlutCallback();
 	//InitialiseGL();
 
 
 	geomInit();
+
 
 	glutMainLoop();
 

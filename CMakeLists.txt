@@ -24,6 +24,7 @@ set(SHADERS
 	"objects/sphere.off"
 )
 
+
 add_executable(main ${HEADERS} ${SRCS})
 
 # Pour chaque shader :
