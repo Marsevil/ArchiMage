@@ -20,7 +20,7 @@ void DrawableObject::draw() const {
 	glBindBuffer( GL_ARRAY_BUFFER, colorsVBO);
 	glNormalPointer(GL_FLOAT, 0, (char *) NULL );
 
-	glDrawArrays(GL_TRIANGLES, 0, nbfaces * 3);
+	glDrawArrays(/*GL_TRIANGLES*/GL_LINES, 0, nbfaces * 3);
 
 	glDisableClientState(GL_NORMAL_ARRAY);
 	glDisableClientState(GL_COLOR_ARRAY);

@@ -61,7 +61,7 @@ void findNewActivePoint() {
 	//Find a random number which will select the new activePoint.
 	std::random_device rd;
 	//std::uniform_int_distribution<int> dist(0, neighbors.size() - 1);
-	std::uniform_int_distribution<int> dist(0, offLoader->nbsommets *3 - 1);
+	std::uniform_int_distribution<int> dist(0, offLoader->nbfaces * 9 - 1);
 
 	//Finally change the activePoint.
 	//auto it = std::find(neighbors.begin(), neighbors.end(), dist(rd));
