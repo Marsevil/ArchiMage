@@ -100,8 +100,10 @@ void renderScene(void) {
 	glUniform3fv(addr_point, 1, point);
 	glUniform4fv(addr_color, 1, color);
 	// Fabien :
-	// glUniform1f(addr_nb_triangles,0, /*<value>*/);
-	// glUniformMatrix2x4fv(addr_neighbors, 1, GL_FALSE, /*<value>*/);
+	float nb_tmp = 2;
+	float tri_tmp[9] = {0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
+	glUniform1f(addr_nb_triangles, nb_tmp);
+	glUniformMatrix3fv(addr_neighbors, 1, GL_FALSE, tri_tmp);
 
 
 	offLoader->draw();
