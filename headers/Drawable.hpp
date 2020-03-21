@@ -9,6 +9,7 @@ class Drawable {
 
 public:
 	Drawable();
+	~Drawable();
 
 	virtual void draw() const = 0;
 	virtual void constructVBO() = 0;

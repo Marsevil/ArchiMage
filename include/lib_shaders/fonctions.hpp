@@ -8,6 +8,7 @@
 
 #include <GL/gl.h>
 
+float tirage_alea(float, float);
 void PrintProgramInfo(GLuint);
 void PrintShaderInfo(GLuint);
 int ReadSourceFile(const char*, char **);

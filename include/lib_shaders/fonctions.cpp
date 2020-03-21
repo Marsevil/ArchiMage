@@ -65,3 +65,9 @@ monfichier.close();
 
 return (taille);
 }
+
+float tirage_alea(float _borneinf, float _bornesup) {
+//random() -> entre 0 et RAND_MAX
+	float res = _borneinf + ((double)random() / ((double)RAND_MAX + 1.0) * _bornesup);
+	return res;
+}

@@ -65,7 +65,7 @@ void findNewActivePoint() {
 
 	neighbors.clear();
 
-	offLoader->changeColor(activePoint, new float[3] {1.0, 0.0, 0.0});
+	//offLoader->changeColor(activePoint, new float[3] {1.0, 0.0, 0.0});
 }
 
 void timer(int extra)
@@ -91,11 +91,10 @@ void renderScene(void) {
 	glLoadIdentity();
 
 	// Set Data :
-	findNewActivePoint();
-	float point[3] = {offLoader->lpoints[100].x, offLoader->lpoints[100].y, offLoader->lpoints[100].z};
+	float point[3] = {float(offLoader->lpoints[activePoint].x), float(offLoader->lpoints[activePoint].y), float(offLoader->lpoints[activePoint].z)};
 	//std::cout << point[0] << " " << point[1] << " " << point[2] << " " << std::endl;
-	float color[4] = {1.0, 0.0, 0.0, 1.0};
-	
+	float color[4] = {tirage_alea(0.0, 1.0), tirage_alea(0.0, 1.0), tirage_alea(0.0, 1.0), 1.0};
+
 	glEnable(GL_VERTEX_PROGRAM_POINT_SIZE);
 
 	// Send data to GPU :
@@ -120,9 +119,19 @@ GLvoid callbackMouse(int wx, int wy) {
 	oldMouseY = wy;
 }
 
-GLvoid callbackSpecialKey(int key, int x, int y) {
-	float speed = 1.0;
+GLvoid callbackKeyboard(unsigned char key, int x, int y)
+{
+	switch (key) {
+		case ' ':
+			findNewActivePoint();
+			break;
 
+		default:
+			std::cerr << "Key not binded" << std::endl;
+	}
+}
+
+GLvoid callbackSpecialKey(int key, int x, int y) {
 	switch (key) {
 		case GLUT_KEY_UP:
 			mouseAngleY++;
@@ -136,7 +145,6 @@ GLvoid callbackSpecialKey(int key, int x, int y) {
 		case GLUT_KEY_RIGHT:
 			mouseAngleX--;
 			break;
-
 		default:
 			std::cerr << "Key not binded" << std::endl;
 	}
@@ -153,6 +161,8 @@ void InitialiseGlutCallback() {
 	glutMotionFunc(callbackMouse);
 
 	glutSpecialFunc(callbackSpecialKey);
+
+	glutKeyboardFunc(callbackKeyboard);
 }
 
 void GlewInit() {

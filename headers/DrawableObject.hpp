@@ -13,6 +13,7 @@ private:
 
 public:
 	DrawableObject();
+	~DrawableObject();
 
 	virtual void draw() const override;
 	virtual void constructVBO() override;

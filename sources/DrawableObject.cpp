@@ -5,6 +5,11 @@ DrawableObject::DrawableObject() : Drawable(), Objet()
 
 }
 
+DrawableObject::~DrawableObject()
+{
+	
+}
+
 void DrawableObject::draw() const {
 	glEnableClientState(GL_VERTEX_ARRAY);
 	//glEnableClientState(GL_COLOR_ARRAY);
