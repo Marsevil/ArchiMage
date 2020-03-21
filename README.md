@@ -1,9 +1,17 @@
 # ArchiMage
 
-This project have to :
+## User guide
+* Click and mouse moving to see the object on different angles.
+* Press space bar to generate a new point.
 
-- [ ] Load a mesh.
-- [ ] Print it with a VBO.
--	[ ] Print a point wich run throught the vertex array.
-- [ ] Process the normal at current vertex.
-- [ ] Finally print the normal.
+## To do
+This project has to :
+
+- [x] Load a mesh.
+- [x] Print it with a VBO.
+-	[x] Print a point wich run throught the vertex array.
+- [x] Process the normal at current vertex.
+- [x] Finally print the normal.
+
+# LICENSE
+Gaëtan and Fabien.
