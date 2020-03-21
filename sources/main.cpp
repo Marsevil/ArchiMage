@@ -38,39 +38,33 @@ void findNewActivePoint() {
 		if (activePoint == offLoader->lfaces[i].S1) {
 			neighbors.push_back(offLoader->lfaces[i].S2);
 			neighbors.push_back(offLoader->lfaces[i].S3);
-			break;
 		}
 
 		//The same if the 2nd point is the current.
-		else if (activePoint == offLoader->lfaces[i].S2) {
+		if (activePoint == offLoader->lfaces[i].S2) {
 			neighbors.push_back(offLoader->lfaces[i].S1);
 			neighbors.push_back(offLoader->lfaces[i].S3);
-			break;
 		}
 
 		//And finally if the 3rd point is the current.
-		else if (activePoint == offLoader->lfaces[i].S3) {
+		if (activePoint == offLoader->lfaces[i].S3) {
 			neighbors.push_back(offLoader->lfaces[i].S1);
 			neighbors.push_back(offLoader->lfaces[i].S2);
-			break;
 		}
 	}
 
-	//std::cout << neighbors.size() << std::endl;
-
 	//Find a random number which will select the new activePoint.
 	std::random_device rd;
-	//std::uniform_int_distribution<int> dist(0, neighbors.size() - 1);
-	std::uniform_int_distribution<int> dist(0, offLoader->nbfaces * 9 - 1);
+	std::uniform_int_distribution<int> dist(0, neighbors.size() - 1);
+	size_t chosenNeighbors = dist(rd);
 
 	//Finally change the activePoint.
-	//auto it = std::find(neighbors.begin(), neighbors.end(), dist(rd));
-	//it++;
 	std::list<int>::iterator it = neighbors.begin();
-	size_t chosenNeighbors = dist(rd);
 	for (size_t i = 0; i < chosenNeighbors; ++i) ++it;
 	activePoint = *it;
-	
+
+	neighbors.clear();
+
 	offLoader->changeColor(activePoint, new float[3] {1.0, 0.0, 0.0});
 }
 
