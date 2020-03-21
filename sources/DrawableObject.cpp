@@ -48,4 +48,3 @@ void DrawableObject::constructVBO() {
 	glBindBuffer(GL_ARRAY_BUFFER, vbo());
 	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * nbfaces * 9, lSommets, GL_STATIC_DRAW);
 }
-*/
