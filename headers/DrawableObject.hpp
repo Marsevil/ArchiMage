@@ -8,8 +8,6 @@
 class DrawableObject : public off::Objet, public virtual Drawable
 {
 private:
-	//float * lcolors;
-	//GLuint colorsVBO;
 
 public:
 	DrawableObject();
@@ -17,7 +15,6 @@ public:
 
 	virtual void draw() const override;
 	virtual void constructVBO() override;
-	//void changeColor(size_t index, float color[3]);
 };
 
 #endif /* end of include guard: DRAWABLE_OBJECT_HPP */

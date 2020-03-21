@@ -64,8 +64,6 @@ void findNewActivePoint() {
 	activePoint = *it;
 
 	neighbors.clear();
-
-	//offLoader->changeColor(activePoint, new float[3] {1.0, 0.0, 0.0});
 }
 
 void timer(int extra)
@@ -92,7 +90,6 @@ void renderScene(void) {
 
 	// Set Data :
 	float point[3] = {float(offLoader->lpoints[activePoint].x), float(offLoader->lpoints[activePoint].y), float(offLoader->lpoints[activePoint].z)};
-	//std::cout << point[0] << " " << point[1] << " " << point[2] << " " << std::endl;
 	float color[4] = {tirage_alea(0.0, 1.0), tirage_alea(0.0, 1.0), tirage_alea(0.0, 1.0), 1.0};
 
 	glEnable(GL_VERTEX_PROGRAM_POINT_SIZE);
