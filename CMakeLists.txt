@@ -18,8 +18,6 @@ set(HEADERS
 
 set(SHADERS
 	"shaders/point_color.frag"
-	"shaders/point_color.vert"
-	"shaders/processNormal.vert"
 	"shaders/main_shader.vert"
 	"objects/bunny.off"
 	"objects/sphere.off"
@@ -37,10 +35,8 @@ foreach(SHADER IN LISTS SHADERS)
 
 	# Si il y a déjà un fichier copié :
 	IF(EXISTS ${CURRENT_SHADER})
-		#D message(STATUS "-- : ${CURRENT_SHADER}")
 		# On test si la source existe toujours :
 		IF(EXISTS ${SOURCE_SHADER})
-			#D message(STATUS "-- : ${SOURCE_SHADER}")
 			# On calcul leurs SHA256 :
 			FILE(SHA256 ${CURRENT_SHADER} A)
 			FILE(SHA256 ${SOURCE_SHADER} B)
