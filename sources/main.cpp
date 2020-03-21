@@ -224,7 +224,7 @@ void GlewInit() {
 
 void geomInit() {
 	offLoader = new DrawableObject();
-	offLoader->charge_OFF("objects/sphere.off");
+	offLoader->charge_OFF("objects/bunny.off");
 	offLoader->constructVBO();
 }
 

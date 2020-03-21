@@ -27,6 +27,6 @@ void main(void)
 
 			vec4 normal = vec4(normalize(cpu_normal), 0.0);
 
-			gl_Position = gl_ModelViewProjectionMatrix * gl_Vertex + normal;
+			gl_Position = gl_ModelViewProjectionMatrix * (gl_Vertex + normal);
     }
 }
