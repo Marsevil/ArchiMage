@@ -1,7 +1,6 @@
 cmake_minimum_required(VERSION 3.13)
 project(ArchiMage)
 # Parametre
-set(CMAKE_BUILD_TYPE Debug) # À commenter lors du rendu
 set(CMAKE_CXX_STANDARD 17)
 
 # Project
@@ -60,8 +59,6 @@ foreach(SHADER IN LISTS SHADERS)
 		endif()
 	endif()
 endforeach()
-
-target_compile_options(main PUBLIC "-Wall")
 
 #My libs
 target_include_directories(main PUBLIC "include" BEFORE)
