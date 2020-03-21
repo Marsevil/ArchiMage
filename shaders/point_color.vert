@@ -14,11 +14,18 @@ void main(void)
 {
     vf_actif = 0.0;
     vf_color = cpu_color;
+    gl_PointSize = 1.0;
+    float delta = 0.05;
 
-    if (gl_Vertex.xyz == cpu_point.xyz)
+    if (gl_Vertex.x >= cpu_point.x - delta && gl_Vertex.x <= cpu_point.x + delta
+        &&
+        gl_Vertex.y >= cpu_point.y - delta && gl_Vertex.y <= cpu_point.y + delta
+        &&
+        gl_Vertex.z >= cpu_point.z - delta && gl_Vertex.z <= cpu_point.z + delta)
     {
+        gl_PointSize = 10.0;
         vf_actif = 1.0;
     }
 
-    gl_Position = gl_Vertex;
+    gl_Position = gl_ModelViewProjectionMatrix * gl_Vertex;
 }

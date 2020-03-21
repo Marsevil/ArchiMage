@@ -7,23 +7,24 @@ DrawableObject::DrawableObject() : Drawable(), Objet()
 
 void DrawableObject::draw() const {
 	glEnableClientState(GL_VERTEX_ARRAY);
-	glEnableClientState(GL_COLOR_ARRAY);
-	glEnableClientState(GL_NORMAL_ARRAY);
+	//glEnableClientState(GL_COLOR_ARRAY);
+	//glEnableClientState(GL_NORMAL_ARRAY);
 
 	// Select the current vbo.
 	glBindBuffer(GL_ARRAY_BUFFER, vbo());
 	glVertexPointer(3, GL_FLOAT, 0, 0);
 
-	glBindBuffer(GL_ARRAY_BUFFER, colorsVBO);
-	glColorPointer(3, GL_FLOAT, 0, (char *) NULL );
+	//glBindBuffer(GL_ARRAY_BUFFER, colorsVBO);
+	//glColorPointer(3, GL_FLOAT, 0, (char *) NULL );
 
-	glBindBuffer( GL_ARRAY_BUFFER, colorsVBO);
-	glNormalPointer(GL_FLOAT, 0, (char *) NULL );
+	//glBindBuffer( GL_ARRAY_BUFFER, colorsVBO);
+	//glNormalPointer(GL_FLOAT, 0, (char *) NULL );
 
-	glDrawArrays(/*GL_TRIANGLES*/GL_LINES, 0, nbfaces * 3);
+	glDrawArrays(GL_TRIANGLES, 0, nbfaces * 3);
+	glDrawArrays(/*GL_TRIANGLES*/GL_POINTS, 0, nbfaces * 3);
 
-	glDisableClientState(GL_NORMAL_ARRAY);
-	glDisableClientState(GL_COLOR_ARRAY);
+	//glDisableClientState(GL_NORMAL_ARRAY);
+	//glDisableClientState(GL_COLOR_ARRAY);
 	glDisableClientState(GL_VERTEX_ARRAY);
 }
 
@@ -53,6 +54,7 @@ void DrawableObject::constructVBO() {
 	glBindBuffer(GL_ARRAY_BUFFER, vbo());
 	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * nbfaces * 9, lSommets, GL_STATIC_DRAW);
 
+	/*
 	lcolors = new float[nbfaces * 9];
 
 	for (unsigned int i = 0, cpt = 0; i < nbfaces; ++i) {
@@ -72,9 +74,10 @@ void DrawableObject::constructVBO() {
 	glGenBuffers((GLsizei) 1, &colorsVBO);
 	glBindBuffer(GL_ARRAY_BUFFER, colorsVBO);
 	glBufferData(GL_ARRAY_BUFFER, nbfaces * 9 * sizeof(float), lcolors, GL_STATIC_DRAW);
+	*/
 }
 
-
+/*
 void DrawableObject::changeColor(size_t index, float color[3])
 {
 	index *= 3;
@@ -88,3 +91,4 @@ void DrawableObject::changeColor(size_t index, float color[3])
 	glBindBuffer(GL_ARRAY_BUFFER, colorsVBO);
 	glBufferData(GL_ARRAY_BUFFER, nbfaces * 9 * sizeof(float), lcolors, GL_STATIC_DRAW);
 }
+*/
