@@ -20,6 +20,7 @@ set(SHADERS
 	"shaders/point_color.frag"
 	"shaders/point_color.vert"
 	"shaders/processNormal.vert"
+	"shaders/main_shader.vert"
 	"objects/bunny.off"
 	"objects/sphere.off"
 )

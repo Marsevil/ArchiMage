@@ -15,11 +15,15 @@
 #include "../headers/DrawableObject.hpp"
 
 int oldMouseX = 0, oldMouseY = 0;
-size_t activePoint = 0;
 float mouseAngleX = 0.0, mouseAngleY = 0.0;
 float xpos = 0, zpos = -1;
 
 DrawableObject * offLoader = nullptr;
+
+/////////////////////Shaders///////////////////
+size_t activePoint = 0;
+float normal[] = {0.0, 0.0, 0.0};
+//////////////////////////////////////////////
 
 // ShaderManager :
 GLSL_Program * shaders;
@@ -27,11 +31,14 @@ GLSL_Program * shaders;
 // Les adresses de ce qu'on va envoyer au GPU :
 GLint addr_point;
 GLint addr_color;
-GLint addr_nb_triangles;
-GLint addr_neighbors;
+GLint addr_normal;
 
 void findNewActivePoint() {
 	std::list<int> neighbors;
+	unsigned int trianglesNeighbors = 0;
+	normal[0] = 0.0;
+	normal[1] = 0.0;
+	normal[2] = 0.0;
 
 	for (size_t i = 0; i < offLoader->nbfaces; ++i) {
 		//Find neighbors of the activePoint.
@@ -53,6 +60,29 @@ void findNewActivePoint() {
 			neighbors.push_back(offLoader->lfaces[i].S1);
 			neighbors.push_back(offLoader->lfaces[i].S2);
 		}
+
+		if (activePoint == offLoader->lfaces[i].S1 || activePoint == offLoader->lfaces[i].S2 || activePoint == offLoader->lfaces[i].S3) {
+			++trianglesNeighbors;
+
+			//1st side of the triangle.
+			float u[] = {
+				float(offLoader->lpoints[offLoader->lfaces[i].S2].x - offLoader->lpoints[offLoader->lfaces[i].S1].x),
+				float(offLoader->lpoints[offLoader->lfaces[i].S2].y - offLoader->lpoints[offLoader->lfaces[i].S1].y),
+				float(offLoader->lpoints[offLoader->lfaces[i].S2].z - offLoader->lpoints[offLoader->lfaces[i].S1].z)
+			};
+
+			//2nd side of the triangle.
+			float v[] = {
+				float(offLoader->lpoints[offLoader->lfaces[i].S3].x - offLoader->lpoints[offLoader->lfaces[i].S1].x),
+				float(offLoader->lpoints[offLoader->lfaces[i].S3].y - offLoader->lpoints[offLoader->lfaces[i].S1].y),
+				float(offLoader->lpoints[offLoader->lfaces[i].S3].z - offLoader->lpoints[offLoader->lfaces[i].S1].z)
+			};
+
+			//Sum of the coord.
+			normal[0] += u[1] * v[2] - u[2] * v[1];
+			normal[1] += u[2] * v[0] - u[0] * v[2];
+			normal[2] += u[0] * v[1] - u[1] * v[0];
+		}
 	}
 
 	//Find a random number which will select the new activePoint.
@@ -64,6 +94,11 @@ void findNewActivePoint() {
 	std::list<int>::iterator it = neighbors.begin();
 	for (size_t i = 0; i < chosenNeighbors; ++i) ++it;
 	activePoint = *it;
+
+	//Average of the vector
+	normal[0] /= trianglesNeighbors;
+	normal[1] /= trianglesNeighbors;
+	normal[2] /= trianglesNeighbors;
 
 	neighbors.clear();
 }
@@ -100,10 +135,7 @@ void renderScene(void) {
 	glUniform3fv(addr_point, 1, point);
 	glUniform4fv(addr_color, 1, color);
 	// Fabien :
-	float nb_tmp = 2;
-	float tri_tmp[9] = {0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
-	glUniform1f(addr_nb_triangles, nb_tmp);
-	glUniformMatrix3fv(addr_neighbors, 1, GL_FALSE, tri_tmp);
+	glUniform3fv(addr_normal, 1, normal);
 
 
 	offLoader->draw();
@@ -204,23 +236,18 @@ void freeSpace() {
 void SetShaders(void) {
 	GLSL_VS color_vs;
 	GLSL_FS color_fs;
-	GLSL_VS normal_vs;
 
-	color_vs.ReadSource("shaders/point_color.vert");
+	color_vs.ReadSource("shaders/main_shader.vert");
 	color_vs.Compile();
 
 	color_fs.ReadSource("shaders/point_color.frag");
 	color_fs.Compile();
 
-	normal_vs.ReadSource("shaders/processNormal.vert");
-
 	PrintShaderInfo(color_vs.idvs);
 	PrintShaderInfo(color_fs.idfs);
-	PrintShaderInfo(normal_vs.idvs);
 
 	shaders = new GLSL_Program();
 
-	shaders->Use_VertexShader(normal_vs);
 	shaders->Use_VertexShader(color_vs);
 	shaders->Use_FragmentShader(color_fs);
 
@@ -230,8 +257,7 @@ void SetShaders(void) {
 	// Link :
 	addr_point = glGetUniformLocation(shaders->idprogram, "cpu_point");
 	addr_color = glGetUniformLocation(shaders->idprogram, "cpu_color");
-	addr_nb_triangles = glGetUniformLocation(shaders->idprogram, "nbTriangle");
-	addr_neighbors = glGetUniformLocation(shaders->idprogram, "triangles");
+	addr_normal = glGetUniformLocation(shaders->idprogram, "cpu_normal");
 
 	PrintProgramInfo(shaders->idprogram);
 
