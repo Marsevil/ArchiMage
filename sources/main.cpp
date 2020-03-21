@@ -226,6 +226,8 @@ void geomInit() {
 	offLoader = new DrawableObject();
 	offLoader->charge_OFF("objects/bunny.off");
 	offLoader->constructVBO();
+
+	findNewActivePoint();
 }
 
 void freeSpace() {
