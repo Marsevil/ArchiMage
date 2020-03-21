@@ -27,6 +27,8 @@ GLSL_Program * shaders;
 // Les adresses de ce qu'on va envoyer au GPU :
 GLint addr_point;
 GLint addr_color;
+GLint addr_nb_triangles;
+GLint addr_neighbors;
 
 void findNewActivePoint() {
 	std::list<int> neighbors;
@@ -87,16 +89,19 @@ void renderScene(void) {
 	//Edit model matrix
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
+	glEnable(GL_VERTEX_PROGRAM_POINT_SIZE);
 
 	// Set Data :
 	float point[3] = {float(offLoader->lpoints[activePoint].x), float(offLoader->lpoints[activePoint].y), float(offLoader->lpoints[activePoint].z)};
 	float color[4] = {tirage_alea(0.0, 1.0), tirage_alea(0.0, 1.0), tirage_alea(0.0, 1.0), 1.0};
 
-	glEnable(GL_VERTEX_PROGRAM_POINT_SIZE);
 
 	// Send data to GPU :
 	glUniform3fv(addr_point, 1, point);
 	glUniform4fv(addr_color, 1, color);
+	// Fabien :
+	// glUniform1f(addr_nb_triangles,0, /*<value>*/);
+	// glUniformMatrix2x4fv(addr_neighbors, 1, GL_FALSE, /*<value>*/);
 
 
 	offLoader->draw();
@@ -197,6 +202,7 @@ void freeSpace() {
 void SetShaders(void) {
 	GLSL_VS color_vs;
 	GLSL_FS color_fs;
+	GLSL_VS normal_vs;
 
 	color_vs.ReadSource("shaders/point_color.vert");
 	color_vs.Compile();
@@ -204,11 +210,15 @@ void SetShaders(void) {
 	color_fs.ReadSource("shaders/point_color.frag");
 	color_fs.Compile();
 
+	normal_vs.ReadSource("shaders/processNormal.vert");
+
 	PrintShaderInfo(color_vs.idvs);
 	PrintShaderInfo(color_fs.idfs);
+	PrintShaderInfo(normal_vs.idvs);
 
 	shaders = new GLSL_Program();
 
+	shaders->Use_VertexShader(normal_vs);
 	shaders->Use_VertexShader(color_vs);
 	shaders->Use_FragmentShader(color_fs);
 
@@ -218,6 +228,8 @@ void SetShaders(void) {
 	// Link :
 	addr_point = glGetUniformLocation(shaders->idprogram, "cpu_point");
 	addr_color = glGetUniformLocation(shaders->idprogram, "cpu_color");
+	addr_nb_triangles = glGetUniformLocation(shaders->idprogram, "nbTriangle");
+	addr_neighbors = glGetUniformLocation(shaders->idprogram, "triangles");
 
 	PrintProgramInfo(shaders->idprogram);
 
