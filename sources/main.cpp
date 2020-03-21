@@ -38,21 +38,18 @@ void findNewActivePoint() {
 		if (activePoint == offLoader->lfaces[i].S1) {
 			neighbors.push_back(offLoader->lfaces[i].S2);
 			neighbors.push_back(offLoader->lfaces[i].S3);
-			break;
 		}
 
 		//The same if the 2nd point is the current.
-		else if (activePoint == offLoader->lfaces[i].S2) {
+		if (activePoint == offLoader->lfaces[i].S2) {
 			neighbors.push_back(offLoader->lfaces[i].S1);
 			neighbors.push_back(offLoader->lfaces[i].S3);
-			break;
 		}
 
 		//And finally if the 3rd point is the current.
-		else if (activePoint == offLoader->lfaces[i].S3) {
+		if (activePoint == offLoader->lfaces[i].S3) {
 			neighbors.push_back(offLoader->lfaces[i].S1);
 			neighbors.push_back(offLoader->lfaces[i].S2);
-			break;
 		}
 	}
 
@@ -60,14 +57,20 @@ void findNewActivePoint() {
 
 	//Find a random number which will select the new activePoint.
 	std::random_device rd;
-	//std::uniform_int_distribution<int> dist(0, neighbors.size() - 1);
-	std::uniform_int_distribution<int> dist(0, offLoader->nbfaces * 9 - 1);
+	std::uniform_int_distribution<int> dist(0, neighbors.size() - 1);
+	//std::uniform_int_distribution<int> dist(0, offLoader->nbfaces * 9 - 1);
 
 	//Finally change the activePoint.
 	//auto it = std::find(neighbors.begin(), neighbors.end(), dist(rd));
 	//it++;
-	activePoint = dist(rd);
-	offLoader->changeColor(activePoint, new float[3] {1.0, 0.0, 0.0});
+	std::list<int>::iterator it = neighbors.begin();
+	size_t chosenNeighbors = dist(rd);
+
+	for (size_t i = 0; i < chosenNeighbors; ++i) ++it;
+
+	activePoint = *it;
+
+	//offLoader->changeColor(activePoint, new float[3] {1.0, 0.0, 0.0});
 }
 
 void timer(int extra)
@@ -94,13 +97,15 @@ void renderScene(void) {
 
 	// Set Data :
 	findNewActivePoint();
-	//float point[3] = {offLoader->lpoints[activePoint].x, offLoader->lpoints[activePoint].y, offLoader->lpoints[activePoint].z};
+	float point[3] = {offLoader->lpoints[100].x, offLoader->lpoints[100].y, offLoader->lpoints[100].z};
 	//std::cout << point[0] << " " << point[1] << " " << point[2] << " " << std::endl;
-	//float color[4] = {1.0, 0.0, 0.0, 1.0};
+	float color[4] = {1.0, 0.0, 0.0, 1.0};
+	
+	glEnable(GL_VERTEX_PROGRAM_POINT_SIZE);
 
 	// Send data to GPU :
-	//glUniform3fv(addr_point, 1, point);
-	//glUniform4fv(addr_color, 1, color);
+	glUniform3fv(addr_point, 1, point);
+	glUniform4fv(addr_color, 1, color);
 
 
 	offLoader->draw();
@@ -125,21 +130,24 @@ GLvoid callbackSpecialKey(int key, int x, int y) {
 
 	switch (key) {
 		case GLUT_KEY_UP:
-			zpos += speed;
+			mouseAngleY++;
 			break;
 		case GLUT_KEY_DOWN:
-			zpos -= speed;
+			mouseAngleY--;
 			break;
 		case GLUT_KEY_LEFT:
-			xpos -= speed;
+			mouseAngleX++;
 			break;
 		case GLUT_KEY_RIGHT:
-			xpos += speed;
+			mouseAngleX--;
 			break;
 
 		default:
 			std::cerr << "Key not binded" << std::endl;
 	}
+
+
+
 }
 
 void InitialiseGlutCallback() {
@@ -153,6 +161,7 @@ void InitialiseGlutCallback() {
 }
 
 void GlewInit() {
+
 	GLenum err = glewInit();
 
 	if (err != GLEW_OK) {
@@ -220,18 +229,20 @@ int main(int argc, char** argv)
 	glutInitWindowPosition(100, 100);
 	glutInitWindowSize(800, 800);
 	glutCreateWindow("Lourd Projet Raffin");
-
 	GlewInit();
-	//SetShaders();
+
 
 	InitialiseGlutCallback();
 	//InitialiseGL();
+	SetShaders();
+
 
 
 	geomInit();
 
 
 	glutMainLoop();
+
 
 	freeSpace();
 

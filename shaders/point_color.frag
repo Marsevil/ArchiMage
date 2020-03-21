@@ -7,9 +7,8 @@ varying vec4 vf_color; // Et la couleur
 
 void main (void)
 {
-    /*
 	if (vf_actif == 1.0)
 		gl_FragColor = vf_color;
 	else
-        gl_FragColor = vec4(1.0,1.0,1.0,1.0);*/
+        gl_FragColor = vec4(1.0,1.0,1.0,1.0);
 }
